@@ -1,0 +1,33 @@
+name: e-wallet
+services:
+  db:
+    container_name: e-kabob-db
+    image: postgres:16-alpine
+    restart: always
+    env_file: ./.env
+    environment:
+      POSTGRES_DB: ${db_name}
+      POSTGRES_USER: ${db_username}
+      POSTGRES_PASSWORD: ${db_password}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - ekabob_network
+    expose:
+      - 5432
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '100m'
+        max-file: '5'
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  ekabob_network:
+    driver: bridge
+
